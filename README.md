@@ -71,4 +71,3 @@ Aplikacja otworzy się pod adresem **http://localhost:8501**
 
 ## Autor
 
-Projekt realizowany samodzielnie — prowadzący potwierdził dopuszczalność.

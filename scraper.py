@@ -1,4 +1,5 @@
 """Pobiera tytuły i komentarze z HackerNews API."""
+import sys
 import httpx
 import re
 
@@ -29,7 +30,8 @@ def fetch_top_stories(n: int = 30) -> list[dict]:
                     "text": item.get("text", ""),
                     "kids": item.get("kids", []),
                 })
-            except Exception:
+            except Exception as e:
+                print(f"Warning: skipping item due to {type(e).__name__}: {e}", file=sys.stderr)
                 continue
         return stories
 
@@ -41,7 +43,8 @@ def fetch_comments(story_id: int, limit: int = 10) -> list[str]:
             item_resp = client.get(HN_ITEM.format(id=story_id))
             item_resp.raise_for_status()
             story = item_resp.json()
-        except Exception:
+        except Exception as e:
+            print(f"Warning: skipping item due to {type(e).__name__}: {e}", file=sys.stderr)
             return []
 
         kids = story.get("kids", [])[:limit]
@@ -59,6 +62,7 @@ def fetch_comments(story_id: int, limit: int = 10) -> list[str]:
                     clean = " ".join(clean.split())
                     if clean.strip():
                         comments.append(clean.strip())
-            except Exception:
+            except Exception as e:
+                print(f"Warning: skipping item due to {type(e).__name__}: {e}", file=sys.stderr)
                 continue
         return comments

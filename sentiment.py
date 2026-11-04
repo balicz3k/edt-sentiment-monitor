@@ -1,4 +1,5 @@
 """Analiza sentymentu używając pre-trained distilbert-sst2."""
+import sys
 from transformers import pipeline
 
 _model = None
@@ -33,9 +34,10 @@ def analyze(texts: list[str]) -> list[dict]:
             try:
                 result = pipe(text.strip(), truncation=True, max_length=512)
                 results.append(result[0])
-            except Exception:
-                results.append({"label": "NEGATIVE", "score": 0.5})
+            except Exception as e:
+                print(f"Warning: skipping item due to {type(e).__name__}: {e}", file=sys.stderr)
+                results.append({"label": "NEUTRAL", "score": 0.5})
         else:
-            results.append({"label": "NEGATIVE", "score": 0.5})
+            results.append({"label": "NEUTRAL", "score": 0.5})
 
     return results
