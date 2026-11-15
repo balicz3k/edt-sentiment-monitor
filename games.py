@@ -1,0 +1,48 @@
+# Gry, z których biorę recenzje do TRENINGU (scripts/download_data.py).
+# Różne gatunki, żeby model nie nauczył się słownictwa jednej gry.
+TRAIN_GAMES = {
+    570: "Dota 2",
+    730: "Counter-Strike 2",
+    440: "Team Fortress 2",
+    271590: "Grand Theft Auto V",
+    578080: "PUBG: Battlegrounds",
+    1172470: "Apex Legends",
+    252490: "Rust",
+    359550: "Rainbow Six Siege",
+    230410: "Warframe",
+    1085660: "Destiny 2",
+    105600: "Terraria",
+    413150: "Stardew Valley",
+    292030: "The Witcher 3",
+    1091500: "Cyberpunk 2077",
+    1245620: "Elden Ring",
+    945360: "Among Us",
+    381210: "Dead by Daylight",
+    236390: "War Thunder",
+    2357570: "Overwatch 2",
+    1517290: "Battlefield 2042",
+    489830: "Skyrim Special Edition",
+    377160: "Fallout 4",
+    1174180: "Red Dead Redemption 2",
+    346110: "ARK: Survival Evolved",
+    218620: "PAYDAY 2",
+    594650: "Hunt: Showdown",
+    1599340: "Lost Ark",
+    1063730: "New World",
+    255710: "Cities: Skylines",
+    289070: "Civilization VI",
+}
+
+# Gry do PREDYKCJI w GUI - celowo inne niż treningowe,
+# żeby sprawdzić model na tekstach, których nie widział.
+PREDICT_GAMES = {
+    620: "Portal 2",
+    1086940: "Baldur's Gate 3",
+    367520: "Hollow Knight",
+    1145360: "Hades",
+    553850: "HELLDIVERS 2",
+    1623730: "Palworld",
+    2246340: "Monster Hunter Wilds",
+    2694490: "Path of Exile 2",
+    1966720: "Lethal Company",
+}
