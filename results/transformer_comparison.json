@@ -1,0 +1,40 @@
+{
+  "n_test": 2689,
+  "device_transformer": "cpu",
+  "tfidf_logreg": {
+    "accuracy": 0.8308,
+    "precision": 0.8299,
+    "recall": 0.7745,
+    "f1": 0.8012,
+    "confusion_matrix": [
+      [
+        1317,
+        188
+      ],
+      [
+        267,
+        917
+      ]
+    ],
+    "ms_per_text": 0.32
+  },
+  "distilbert_sst2": {
+    "accuracy": 0.8066,
+    "precision": 0.8451,
+    "recall": 0.6867,
+    "f1": 0.7577,
+    "confusion_matrix": [
+      [
+        1356,
+        149
+      ],
+      [
+        371,
+        813
+      ]
+    ],
+    "roc_auc": 0.8844,
+    "ms_per_text": 91.84
+  },
+  "agreement": 0.8003
+}

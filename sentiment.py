@@ -1,43 +1,60 @@
-"""Analiza sentymentu używając pre-trained distilbert-sst2."""
-import sys
-from transformers import pipeline
+"""Dwa modele sentymentu z tym samym interfejsem: predict(texts) -> (etykiety, pewności).
 
-_model = None
+Etykieta 1 = pozytywny, 0 = negatywny. Puste teksty trzeba odfiltrować
+wcześniej (robi to app.py) - nie zgaduję dla nich etykiety.
+"""
+from pathlib import Path
 
+import joblib
+import numpy as np
 
-def get_pipeline():
-    """Inicjalizuje i zwraca pipeline sentymentu (singleton)."""
-    global _model
-    if _model is None:
-        _model = pipeline(
-            "sentiment-analysis",
-            model="distilbert-base-uncased-finetuned-sst-2-english",
-            revision="main",
-        )
-    return _model
+from text_cleaning import clean_many
+
+MODEL_PATH = Path(__file__).resolve().parent / "models" / "tfidf_logreg.joblib"
+TRANSFORMER_NAME = "distilbert-base-uncased-finetuned-sst-2-english"
+LABEL_NAMES = {1: "pozytywny", 0: "negatywny"}
 
 
-def analyze(texts: list[str]) -> list[dict]:
-    """
-    Analizuje listę tekstów.
-    Zwraca listę słowników {label: 'POSITIVE'/'NEGATIVE', score: float}.
-    Puste teksty są pomijane i zastępowane neutralnym wynikiem.
-    """
-    if not texts:
-        return []
+class OwnModel:
+    """TF-IDF + regresja logistyczna wytrenowana na recenzjach Steam (train_model.py)."""
+    name = "Własny: TF-IDF + LogReg"
 
-    pipe = get_pipeline()
+    def __init__(self, path: Path = MODEL_PATH):
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Brak pliku {path.name}. Uruchom najpierw: python train_model.py")
+        saved = joblib.load(path)
+        self.pipeline = saved["pipeline"]
+        self.normalization = saved["normalization"]
 
-    results = []
-    for text in texts:
-        if text and text.strip():
-            try:
-                result = pipe(text.strip(), truncation=True, max_length=512)
-                results.append(result[0])
-            except Exception as e:
-                print(f"Warning: skipping item due to {type(e).__name__}: {e}", file=sys.stderr)
-                results.append({"label": "NEUTRAL", "score": 0.5})
-        else:
-            results.append({"label": "NEUTRAL", "score": 0.5})
+    def clean(self, texts: list[str]) -> list[str]:
+        return clean_many(texts, normalize=self.normalization)
 
-    return results
+    def predict_clean(self, cleaned: list[str]):
+        proba = self.pipeline.predict_proba(cleaned)[:, 1]
+        labels = (proba >= 0.5).astype(int)
+        confidence = np.where(labels == 1, proba, 1 - proba)
+        return labels, confidence
+
+    def predict(self, texts: list[str]):
+        return self.predict_clean(self.clean(texts))
+
+
+class TransformerModel:
+    """Gotowy DistilBERT dostrojony na SST-2 (zdania z recenzji filmów).
+    Dostaje surowy tekst - ma własny tokenizator i nie potrzebuje czyszczenia."""
+    name = "Transformer: DistilBERT SST-2"
+
+    def __init__(self, device: str | None = None):
+        import torch
+        from transformers import pipeline
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = device
+        self.pipe = pipeline("sentiment-analysis", model=TRANSFORMER_NAME, device=device)
+
+    def predict(self, texts: list[str], batch_size: int = 32):
+        out = self.pipe(texts, truncation=True, max_length=512, batch_size=batch_size)
+        labels = np.array([1 if o["label"] == "POSITIVE" else 0 for o in out])
+        confidence = np.array([o["score"] for o in out])
+        return labels, confidence
