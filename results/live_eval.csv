@@ -1,0 +1,21 @@
+gra,model,n,accuracy,f1,data_pobrania
+Baldur's Gate 3,own,198,0.8636,0.8586,2026-11-16
+Baldur's Gate 3,transformer,198,0.8485,0.8485,2026-11-16
+HELLDIVERS 2,own,197,0.8528,0.8497,2026-11-16
+HELLDIVERS 2,transformer,197,0.8579,0.8511,2026-11-16
+Hades,own,192,0.8594,0.8586,2026-11-16
+Hades,transformer,192,0.8698,0.8634,2026-11-16
+Hollow Knight,own,194,0.8196,0.8241,2026-11-16
+Hollow Knight,transformer,194,0.8351,0.8333,2026-11-16
+Lethal Company,own,194,0.8041,0.7865,2026-11-16
+Lethal Company,transformer,194,0.8247,0.809,2026-11-16
+Monster Hunter Wilds,own,199,0.8543,0.8557,2026-11-16
+Monster Hunter Wilds,transformer,199,0.8191,0.8125,2026-11-16
+Palworld,own,196,0.8673,0.8646,2026-11-16
+Palworld,transformer,196,0.8214,0.8066,2026-11-16
+Path of Exile 2,own,198,0.8485,0.837,2026-11-16
+Path of Exile 2,transformer,198,0.8333,0.8216,2026-11-16
+Portal 2,own,200,0.82,0.8218,2026-11-16
+Portal 2,transformer,200,0.83,0.8247,2026-11-16
+RAZEM,own,1768,0.8433,0.84,2026-11-16
+RAZEM,transformer,1768,0.8377,0.8303,2026-11-16
