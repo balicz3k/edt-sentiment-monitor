@@ -20,3 +20,15 @@ data/
 .idea/
 .vscode/
 .DS_Store
+
+# pliki pomocnicze LaTeX-a
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
