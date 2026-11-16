@@ -72,6 +72,8 @@ python scripts/compare_transformer.py     # porównanie z DistilBERT (opcja --cp
 python scripts/evaluate_live.py           # ocena na świeżych recenzjach z innych gier
 pytest -q                                 # testy czyszczenia tekstu
 jupyter notebook notebooks/01_model.ipynb # analiza i wnioski
+python scripts/make_figures.py            # wykres do prezentacji (docs/img/)
+cd docs && latexmk -pdf prezentacja.tex   # slajdy (Beamer)
 ```
 
 Przy pierwszym użyciu transformera biblioteka `transformers` pobiera model
@@ -87,7 +89,7 @@ text_cleaning.py           czyszczenie tekstu (pipeline z zajęć)
 train_model.py             TF-IDF + LogReg, dobór C, ewaluacja, zapis modelu
 sentiment.py               wspólny interfejs: własny model i DistilBERT
 scripts/download_data.py   zbiór treningowy
-scripts/compare_transformer.py, scripts/evaluate_live.py
+scripts/compare_transformer.py, scripts/evaluate_live.py, scripts/make_figures.py
 notebooks/01_model.ipynb   eksperymenty i wnioski
 results/                   metryki, macierze pomyłek, wagi słów, ocena na żywo
 tests/test_cleaning.py     testy czyszczenia
