@@ -212,8 +212,8 @@ def tab_reviews():
 
 def tab_single_text():
     st.markdown("Wpisz własny tekst, żeby zobaczyć kolejne kroki czyszczenia i predykcję.")
-    text = st.text_area("Tekst", "This game is NOT good, I don't recommend it!!! 2/10 "
-                                 "[b]Refund[/b] https://example.com")
+    text = st.text_area("Tekst", "The developers keep breaking the game!!! It's NOT fun anymore, "
+                                 "don't buy it. 2/10 [b]Refund[/b] https://example.com")
     if not text.strip():
         return
     steps = explain_steps(text, normalize=load_own_model().normalization)
