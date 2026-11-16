@@ -8,8 +8,8 @@ Kolejność kroków:
     bag-of-words "GREAT" i "great" to to samo słowo - opis w docs/NAUKA.md)
  5. tokenizacja: słowa, liczby, oceny typu 10/10, znaki ! i ?, emoji
     (nie usuwam wszystkich znaków specjalnych - patrz pułapki z zajęć)
- 6. lematyzacja (spaCy) albo stemming (Porter z NLTK) albo nic
- 7. stopwords BEZ słów negacji - "not good" musi zostać "not good"
+ 6. stopwords BEZ słów negacji - "not good" musi zostać "not good"
+ 7. stemming (Porter z NLTK) albo lematyzacja (spaCy) albo nic
 """
 import html
 import re
@@ -96,14 +96,17 @@ def clean_many(texts: list[str], normalize: str | None = "lemma",
     normalize: "lemma", "stem" albo None.
     """
     token_lists = [tokenize(basic_clean(t)) for t in texts]
+    # stopwords usuwam PRZED stemmingiem - po nim "this" to "thi" i nie pasuje do listy
+    if stopwords:
+        token_lists = [remove_stopwords(toks) for toks in token_lists]
     if normalize == "lemma":
         token_lists = lemmatize_many(token_lists)
+        if stopwords:   # lematyzacja tworzy nowe stopwords, np. "was" -> "be"
+            token_lists = [remove_stopwords(toks) for toks in token_lists]
     elif normalize == "stem":
         token_lists = [[_stemmer.stem(t) for t in toks] for toks in token_lists]
     elif normalize is not None:
         raise ValueError(f"Nieznana normalizacja: {normalize}")
-    if stopwords:
-        token_lists = [remove_stopwords(toks) for toks in token_lists]
     return [" ".join(toks) for toks in token_lists]
 
 
@@ -117,13 +120,13 @@ def explain_steps(text: str, normalize: str = "lemma") -> list[tuple[str, str]]:
     cleaned = basic_clean(text)
     steps.append(("HTML/BBCode/URL usunięte, negacje rozwinięte, małe litery", cleaned))
     tokens = tokenize(cleaned)
-    steps.append(("Tokeny", " | ".join(tokens)))
+    steps.append(("Tokeny", ", ".join(tokens)))
+    tokens = remove_stopwords(tokens)
+    steps.append(("Bez stopwords (negacje zostają)", ", ".join(tokens)))
     if normalize == "lemma":
-        tokens = lemmatize_many([tokens])[0]
-        steps.append(("Lematyzacja (spaCy)", " | ".join(tokens)))
+        tokens = remove_stopwords(lemmatize_many([tokens])[0])
+        steps.append(("Lematyzacja (spaCy)", ", ".join(tokens)))
     elif normalize == "stem":
         tokens = [_stemmer.stem(t) for t in tokens]
-        steps.append(("Stemming (Porter)", " | ".join(tokens)))
-    tokens = remove_stopwords(tokens)
-    steps.append(("Bez stopwords (negacje zostają)", " | ".join(tokens)))
+        steps.append(("Stemming (Porter)", ", ".join(tokens)))
     return steps

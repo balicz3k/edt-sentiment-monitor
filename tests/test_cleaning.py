@@ -45,3 +45,8 @@ def test_stemming_and_lemmatization_differ():
 def test_empty_and_none():
     assert clean_text("", normalize=None) == ""
     assert basic_clean(None) == ""
+
+
+def test_stopwords_removed_before_stemming():
+    # "this" po stemmingu to "thi" - nie może przejść przez filtr stopwords
+    assert clean_text("This game is not good", normalize="stem").split() == ["game", "not", "good"]

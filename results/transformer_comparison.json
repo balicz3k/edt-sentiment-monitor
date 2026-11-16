@@ -2,21 +2,21 @@
   "n_test": 2689,
   "device_transformer": "cpu",
   "tfidf_logreg": {
-    "accuracy": 0.8308,
-    "precision": 0.8299,
-    "recall": 0.7745,
-    "f1": 0.8012,
+    "accuracy": 0.8185,
+    "precision": 0.8113,
+    "recall": 0.766,
+    "f1": 0.788,
     "confusion_matrix": [
       [
-        1317,
-        188
+        1294,
+        211
       ],
       [
-        267,
-        917
+        277,
+        907
       ]
     ],
-    "ms_per_text": 0.32
+    "ms_per_text": 0.22
   },
   "distilbert_sst2": {
     "accuracy": 0.8066,
@@ -34,7 +34,7 @@
       ]
     ],
     "roc_auc": 0.8844,
-    "ms_per_text": 91.84
+    "ms_per_text": 92.24
   },
-  "agreement": 0.8003
+  "agreement": 0.7917
 }
